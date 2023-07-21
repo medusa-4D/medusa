@@ -1,0 +1,850 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Face &amp; landmark detection &#8212; Medusa</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/face_and_landmark_detection';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Command-line interface" href="../api/cli.html" />
+    <link rel="prev" title="Analysis" href="analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Medusa: 4D face reconstruction and analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Medusa installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/citation.html">Citation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="reconstruction.html">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_representation.html">Data representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rendering.html">Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Face &amp; landmark detection</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../api/cli.html">Command-line interface</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/threeD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.threeD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/align_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.align_crop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/bbox_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.bbox_crop</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/example_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.example_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/regenerate_example_recon_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.regenerate_example_recon_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/template_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.template_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/defaults/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.defaults</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/detect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/scrfd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.scrfd</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/yunet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.yunet</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.tracking</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/for_developers.html">For developers</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/medusa-4D/medusa/master?urlpath=tree/tutorials/face_and_landmark_detection.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/edit/master/tutorials/face_and_landmark_detection.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Ftutorials/face_and_landmark_detection.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tutorials/face_and_landmark_detection.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Face & landmark detection</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#face-detection">Face detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landmark-detection">Landmark detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cropping">Cropping</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="face-landmark-detection">
+<h1>Face &amp; landmark detection<a class="headerlink" href="#face-landmark-detection" title="Permalink to this heading">#</a></h1>
+<p>Although Medusa’s main focus is 3D/4D reconstruction, it also contains functionality for face detection, facial landmark prediction, and cropping as these steps often need to be performed before feeding images into reconstruction models.</p>
+<p>In this tutorial, we will demonstrate these features.</p>
+<section id="face-detection">
+<h2>Face detection<a class="headerlink" href="#face-detection" title="Permalink to this heading">#</a></h2>
+<p>The first step in many face analysis pipelines is <em>face detection</em>. Medusa contains two classes that perform face detection:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SCRFDetector</span></code>: a detection model based on InsightFace’s SCRFD model <code class="docutils literal notranslate"><span class="pre">citep</span></code>{};</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">YunetDetector</span></code>: a detection model implemented in OpenCV</p></li>
+</ul>
+<p>We recommend using the <code class="docutils literal notranslate"><span class="pre">SCRFDetector</span></code> as our experience is that it is substantially more accurate than <code class="docutils literal notranslate"><span class="pre">YunetDetector</span></code> (albeit a bit slower when run on CPU); if you want to use the <code class="docutils literal notranslate"><span class="pre">YunetDetector</span></code>, make sure to install OpenCV first (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">python-opencv</span></code>). So we’ll use the <code class="docutils literal notranslate"><span class="pre">SCRFDetector</span></code> for the rest of this section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.detect</span> <span class="kn">import</span> <span class="n">SCRFDetector</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Under the hood, <code class="docutils literal notranslate"><span class="pre">SCRFDetector</span></code> uses an ONNX model provided by InsightFace, but our implementation is quite a bit faster than the original InsightFace implementation as ours uses PyTorch throughout (rather than a mix of PyTorch and numpy).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SCRFDetector</span></code> takes the following inputs upon initialization:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">det_size</span></code>: size to resize images to before passing to the detection model;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">det_threshold</span></code>: minimum detection threshold (float between 0-1)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nms_threshold</span></code>: non-maximum suppression threshold (boxes overlapping more than this proportion are removed)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device</span></code>: either “cpu” or “cuda” (determined automatically by default)</p></li>
+</ul>
+<p>The most important arguments are <code class="docutils literal notranslate"><span class="pre">det_size</span></code> and <code class="docutils literal notranslate"><span class="pre">det_threshold</span></code>; a higher <code class="docutils literal notranslate"><span class="pre">det_size</span></code> (a tuple with two integers, width x height) leads to potentially more accurate detections but slower processing; increasing <code class="docutils literal notranslate"><span class="pre">det_threshold</span></code> leads to more conservative detections (fewer false alarms, but more misses) and vice versa.</p>
+<p>In our experience, the defaults are fine for most stimuli:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">detector</span> <span class="o">=</span> <span class="n">SCRFDetector</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">detector</span> <span class="o">=</span> <span class="n">SCRFDetector</span><span class="p">()</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:55,</span> in <span class="ni">SCRFDetector.__init__</span><span class="nt">(self, det_size, det_threshold, nms_threshold, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span> <span class="o">=</span> <span class="n">det_size</span>
+<span class="ne">---&gt; </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_det_model</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postproc_model</span> <span class="o">=</span> <span class="n">SCRFDPostproc</span><span class="p">(</span><span class="n">det_size</span><span class="p">,</span> <span class="n">det_threshold</span><span class="p">,</span> <span class="n">nms_threshold</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:74,</span> in <span class="ni">SCRFDetector._init_det_model</span><span class="nt">(self, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="n">f_in</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;buffalo_path&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;det_10g.onnx&#39;</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f_in</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">74</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find model at </span><span class="si">{</span><span class="n">f_in</span><span class="si">}</span><span class="s2">; run `medusa_download_external_data`&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="n">output_shapes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span> <span class="k">for</span> <span class="n">n_feat</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span>  <span class="c1"># score, bbox, lms</span>
+
+<span class="ne">ValueError</span>: Could not find model at /home/runner/.medusa_ext_data/buffalo_l/det_10g.onnx; run `medusa_download_external_data`
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s apply it to some example data. We’ll use a single frame from out example video:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_image</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">get_example_image</span><span class="p">(</span><span class="n">load_torch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">img</span></code> represents is loaded as a PyTorch tensor, but the detectors in Medusa can deal with paths to images or numpy arrays, too. Now, to process this image with the detector, we’ll call the <code class="docutils literal notranslate"><span class="pre">detector</span></code> object as if it is a function (which internally triggers the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">det</span> <span class="o">=</span> <span class="n">detector</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The output of the detector call, <code class="docutils literal notranslate"><span class="pre">det</span></code>, contains a dictionary with information:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">det</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;img_idx&#39;, &#39;conf&#39;, &#39;lms&#39;, &#39;bbox&#39;, &#39;n_img&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notably, all values of the dictionary are PyTorch tensors. The most important keys are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">conf</span></code>: the confidence of each detection (0-1)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lms</span></code>: a set of five landmark coordinates per detection</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bbox</span></code>: a bounding box per detection</p></li>
+</ul>
+<p>Let’s take a look at <code class="docutils literal notranslate"><span class="pre">conf</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conf</span> <span class="o">=</span> <span class="n">det</span><span class="p">[</span><span class="s1">&#39;conf&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conf: </span><span class="si">{</span><span class="n">conf</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, shape: </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">conf</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Conf: 0.884, shape: (1,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>So for this image, there is only one detection with a confidence of 0.884. Note that there may be more than one detection per image when there are more faces in the image!</p>
+<p>Now, let’s also take a look at the bounding box for the detection:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">det</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[187.4764,  20.0963, 414.5220, 337.8104]], device=&#39;cuda:0&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The bounding box contains four values (in pixel units) that represent the box’ mimimum x-value, minimum y-value, maximum x-value, and maximum y-value (in that order). We can in fact visualize this bounding box quite straightforwardly using <code class="docutils literal notranslate"><span class="pre">torchvision</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">torchvision.utils</span> <span class="kn">import</span> <span class="n">draw_bounding_boxes</span><span class="p">,</span> <span class="n">save_image</span>
+
+<span class="c1"># Note that `draw_bounding_boxes` expects the img to be in C x H x W format</span>
+<span class="n">red</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">det</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="n">red</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Save image to disk and display in notebook</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="s1">&#39;bbox.png&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;bbox.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/aea34f420abaccbe457b5e3bc7ffab2531a275379da257caff65db5d0a64a8f0.png" src="../_images/aea34f420abaccbe457b5e3bc7ffab2531a275379da257caff65db5d0a64a8f0.png" />
+</div>
+</div>
+<p>Looks like a proper bounding box! Now, let’s finally look at the predicted facial landmarks:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">det</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[[249.6934, 138.3164],
+         [364.9851, 140.5700],
+         [311.6084, 185.3770],
+         [256.7564, 250.2902],
+         [357.6646, 251.7064]]], device=&#39;cuda:0&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, each detection also comes with 5 landmarks consisting of two values (one for X, one for Y) in pixel units. As we’ll show below (again, using <code class="docutils literal notranslate"><span class="pre">torchvision</span></code>), these landmarks refer to the left eye, right eye, tip of the nose, left mouthcorner, and right mouth corner:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchvision.utils</span> <span class="kn">import</span> <span class="n">draw_keypoints</span>
+
+<span class="c1"># Note that `draw_keypoints` also expects the img to be in C x H x W format</span>
+<span class="n">draw</span> <span class="o">=</span> <span class="n">draw_keypoints</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">det</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="n">red</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Save image to disk and display in notebook</span>
+<span class="n">save_image</span><span class="p">(</span><span class="n">draw</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="s1">&#39;lms.png&#39;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;lms.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/02843f37f5568aed421c5538766d924495cc7b08345bf4ca3b9105a0ebf86091.png" src="../_images/02843f37f5568aed421c5538766d924495cc7b08345bf4ca3b9105a0ebf86091.png" />
+</div>
+</div>
+<p>Show video / batch stuff</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="kn">from</span> <span class="nn">medusa.detect</span> <span class="kn">import</span> <span class="n">SCRFDetector</span>
+<span class="kn">from</span> <span class="nn">medusa.io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
+
+<span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">VideoLoader</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+
+<span class="n">detector</span> <span class="o">=</span> <span class="n">SCRFDetector</span><span class="p">()</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">detector</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.containers</span> <span class="kn">import</span> <span class="n">BatchResults</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Video</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">BatchResults</span><span class="p">(</span><span class="o">**</span><span class="n">out</span><span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="s1">&#39;./test.mp4&#39;</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="s1">&#39;./test.mp4&#39;</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="landmark-detection">
+<h2>Landmark detection<a class="headerlink" href="#landmark-detection" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="cropping">
+<h2>Cropping<a class="headerlink" href="#cropping" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Analysis</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/cli.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Command-line interface</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#face-detection">Face detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landmark-detection">Landmark detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cropping">Cropping</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Lukas Snoek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Developed at the University of Glasgow
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1016 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>4D reconstruction &#8212; Medusa</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/reconstruction';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data representation" href="data_representation.html" />
+    <link rel="prev" title="How to cite Medusa and its dependencies" href="../getting_started/citation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Medusa: 4D face reconstruction and analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Medusa installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/citation.html">Citation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_representation.html">Data representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rendering.html">Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../api/cli.html">Command-line interface</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/threeD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.threeD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/align_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.align_crop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/bbox_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.bbox_crop</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/example_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.example_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/regenerate_example_recon_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.regenerate_example_recon_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/template_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.template_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/defaults/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.defaults</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/detect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/scrfd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.scrfd</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/yunet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.yunet</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.tracking</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/for_developers.html">For developers</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/medusa-4D/medusa/master?urlpath=tree/tutorials/reconstruction.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/edit/master/tutorials/reconstruction.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Ftutorials/reconstruction.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tutorials/reconstruction.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>4D reconstruction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-easy-way">The easy way</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mediapipe">Mediapipe</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flame-based-models">FLAME-based models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hard-way">The hard way</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cropping">Cropping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reconstruction">Reconstruction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking">Tracking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#storing-the-data">Storing the data</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="d-reconstruction">
+<h1>4D reconstruction<a class="headerlink" href="#d-reconstruction" title="Permalink to this heading">#</a></h1>
+<p>In this short tutorial, we’ll focus on how to use Medusa to reconstruct 4D faces from (video) data.</p>
+<section id="the-easy-way">
+<h2>The easy way<a class="headerlink" href="#the-easy-way" title="Permalink to this heading">#</a></h2>
+<p>The easiest way, as shown in the <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>, is using the high-level function <code class="docutils literal notranslate"><span class="pre">videorecon</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.recon</span> <span class="kn">import</span> <span class="n">videorecon</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As can be seen in the package’s <span class="xref myst">API docs</span>, this function takes multiple arguments, the most important being:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">video_path</span></code>: path to the video that you want to process, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">recon_model</span></code>: the name of the reconstruction model you want to use</p></li>
+</ul>
+<p>Medusa loads in the video data using the <a class="reference external" href="https://github.com/PyAV-Org/PyAV">PyAV</a> package (which itself is a wrapper around <a class="reference external" href="https://ffmpeg.org/">ffmpeg</a>), so any video format supported by PyAV can be used; later in this tutorial, we’ll address data loading in more detail!</p>
+<p>At the moment, Medusa supports the following reconstruction models:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.defaults</span> <span class="kn">import</span> <span class="n">RECON_MODELS</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">RECON_MODELS</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;emoca-dense&#39;, &#39;emoca-coarse&#39;, &#39;deca-dense&#39;, &#39;deca-coarse&#39;, &#39;mediapipe&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="mediapipe">
+<h3>Mediapipe<a class="headerlink" href="#mediapipe" title="Permalink to this heading">#</a></h3>
+<p>The ‘mediapipe’ model is a wrapper around the <a class="reference external" href="https://google.github.io/mediapipe/solutions/face_mesh.html">Mediapipe Face Mesh</a> model with added functionality that estimates the pose of the face. The 3D topology that Mediapipe reconstructs has 468 vertices (or “landmarks”) that describe the shape of the face surface. We’ll discuss how the reconstructed data is represented in more detail in the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> data!</p>
+<p><img alt="mediapipe_topo" src="../_images/mediapipe_mesh.png" /></p>
+<p><em>Example of mesh reconstructed by the Mediapipe model, containing 468 vertices (red points).</em></p>
+</section>
+<section id="flame-based-models">
+<h3>FLAME-based models<a class="headerlink" href="#flame-based-models" title="Permalink to this heading">#</a></h3>
+<p>The ‘*-coarse’ and *-dense’ models are different reconstruction models based on the <a class="reference external" href="https://flame.is.tue.mpg.de/">FLAME</a> topology. The different types of models (<a class="reference external" href="https://emoca.is.tue.mpg.de/">emoca</a>, and <a class="reference external" href="https://deca.is.tue.mpg.de/">deca</a>) differ in how they reconstruct the face, but they all return a 3D mesh in the FLAME topology.</p>
+<p>The suffixes “coarse” and “dense” refer to the density of the returned topology; its “spatial resolution” if you will. The “coarse” models return a mesh with 5023 vertices while the “dense” models return a mesh with 59,315 vertices. Both the coarse and dense FLAME-based models return a reconstruction of the entire head (as shown in the figure below), in contrast to the Mediapipe model which only reconstucts the face.</p>
+<p><img alt="flame_mesh" src="../_images/flame_mesh.png" /></p>
+<p><em>Example of mesh reconstructed by a coarse FLAME-based model, containing 5023 vertices (red points) that cover the entire head (including ears and eyes).</em></p>
+<p>In our experience, the “emoca-coarse” model provides the most accurate reconstructions at an acceptable spatial resolution, so we’ll use that model throughout the tutorials. <strong>Note</strong>: you need to downloaded additional data to use the FLAME-based models; check the <a class="reference internal" href="../getting_started/installation.html"><span class="doc std std-doc">installation instructions</span></a> for details.</p>
+<p>Enough talking; let’s reconstruct a video! We’ll use a short example video clip contained in the package.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="n">vid_path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+
+<span class="c1"># We&#39;ll also set the logging level to WARNING to avoid printing too much information</span>
+<span class="c1"># Set this to &#39;INFO&#39; (the default) to see more information</span>
+<span class="n">data_recon</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">vid_path</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># We&#39;ll also set the logging level to WARNING to avoid printing too much information</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Set this to &#39;INFO&#39; (the default) to see more information</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">data_recon</span> <span class="o">=</span> <span class="n">videorecon</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">recon_model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
+
+<span class="nn">File ~/.cache/pypoetry/virtualenvs/medusa-2VgPi4zZ-py3.10/lib/python3.10/site-packages/torch/utils/_contextlib.py:115,</span> in <span class="ni">context_decorator.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">112</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">114</span>     <span class="k">with</span> <span class="n">ctx_factory</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">115</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/recon/recon.py:68,</span> in <span class="ni">videorecon</span><span class="nt">(video_path, recon_model, device, n_frames, batch_size, loglevel, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="c1"># Initialize reconstruction model</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="k">if</span> <span class="n">recon_model</span> <span class="ow">in</span> <span class="n">FLAME_MODELS</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">68</span>     <span class="n">crop_model</span> <span class="o">=</span> <span class="n">BboxCropModel</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># for face detection / cropping</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span>     <span class="n">reconstructor</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>         <span class="n">recon_model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">orig_img_size</span><span class="o">=</span><span class="n">video_metadata</span><span class="p">[</span><span class="s2">&quot;img_size&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="k">elif</span> <span class="n">recon_model</span> <span class="o">==</span> <span class="s2">&quot;mediapipe&quot;</span><span class="p">:</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/crop/bbox_crop.py:40,</span> in <span class="ni">BboxCropModel.__init__</span><span class="nt">(self, lms_model_name, output_size, detector, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>  <span class="c1"># h, w</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+<span class="ne">---&gt; </span><span class="mi">40</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lms_model</span> <span class="o">=</span> <span class="n">RetinafaceLandmarkModel</span><span class="p">(</span><span class="n">lms_model_name</span><span class="p">,</span> <span class="n">detector</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/landmark/retinaface.py:29,</span> in <span class="ni">RetinafaceLandmarkModel.__init__</span><span class="nt">(self, model_name, detector, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+<span class="ne">---&gt; </span><span class="mi">29</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="n">detector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_model</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:55,</span> in <span class="ni">SCRFDetector.__init__</span><span class="nt">(self, det_size, det_threshold, nms_threshold, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="bp">self</span><span class="o">.</span><span class="n">det_size</span> <span class="o">=</span> <span class="n">det_size</span>
+<span class="ne">---&gt; </span><span class="mi">55</span> <span class="bp">self</span><span class="o">.</span><span class="n">_det_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_det_model</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="bp">self</span><span class="o">.</span><span class="n">_postproc_model</span> <span class="o">=</span> <span class="n">SCRFDPostproc</span><span class="p">(</span><span class="n">det_size</span><span class="p">,</span> <span class="n">det_threshold</span><span class="p">,</span> <span class="n">nms_threshold</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+<span class="nn">File ~/work/medusa/medusa/medusa/detect/scrfd.py:74,</span> in <span class="ni">SCRFDetector._init_det_model</span><span class="nt">(self, device)</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="n">f_in</span> <span class="o">=</span> <span class="n">get_external_data_config</span><span class="p">(</span><span class="s1">&#39;buffalo_path&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;det_10g.onnx&#39;</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f_in</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">74</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find model at </span><span class="si">{</span><span class="n">f_in</span><span class="si">}</span><span class="s2">; run `medusa_download_external_data`&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="n">output_shapes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span> <span class="k">for</span> <span class="n">n_feat</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span>  <span class="c1"># score, bbox, lms</span>
+
+<span class="ne">ValueError</span>: Could not find model at /home/runner/.medusa_ext_data/buffalo_l/det_10g.onnx; run `medusa_download_external_data`
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function returns the reconstruction data as an object from the custom <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Data4D</span></code></span> class. In the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial, we’ll explain the way Medusa represents reconstruction data at length!</p>
+</section>
+</section>
+<section id="the-hard-way">
+<h2>The hard way<a class="headerlink" href="#the-hard-way" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">videorecon</span></code> function provides an easy to use, high-level API to reconstuct faces from videos, but it hides much of the intermediate steps between data loading and reconstruction. In you want to know more about these steps or want more flexibility in your analyses, read on!</p>
+<section id="data-loading">
+<h3>Data loading<a class="headerlink" href="#data-loading" title="Permalink to this heading">#</a></h3>
+<p>The first step in the pipeline is to read (part of) a video into memory. (Although Medusa’s reconstruction models work on both single images as well as videos, here we’ll assume you want to reconstruct face data from videos.) As mentioned before, Medusa provides a custom class, <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code></span> to perform easy and fast loading of video frames.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> class inherits from PyTorch’s <a class="reference external" href="https://pytorch.org/docs/stable/data.html"><code class="docutils literal notranslate"><span class="pre">DataLoader</span></code></a> class, so it can be used in roughly the same way. The most important arguments when initializing a <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> object are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">video_path</span></code>: path to the video file, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: number of frames to read in at once.</p></li>
+</ul>
+<p>As the <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> parameter suggests, the video is not loaded into memory at once, but in <em>batches</em>. This is to avoid out-of-memory errors, especially if you intend load data onto a GPU (which you can control using the <code class="docutils literal notranslate"><span class="pre">device</span></code> parameter in most classes/functions). Let’s initialize a <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> with our example video file and a batch size of 32 (the default, in fact):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loader</span> <span class="o">=</span> <span class="n">VideoLoader</span><span class="p">(</span><span class="n">vid_path</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">loader</span></code> is, like PyTorch <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> objects, an iterable, which means that you can loop over it! In each iteration of the loop, it will yield a batch of data with <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> number of frames:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loader</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading in batch </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> frames ...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, each iteration returns a batch of 32 frames, except the last batch which only contains the last 8 frames, after which the loader stops automatically.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">batch</span></code> variable returned each iteration contains video frame data as a <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> object with unsigned integers (with values ranging from 0-255):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">batch</span><span class="p">),</span> <span class="n">batch</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The tensor is organized as a four dimensional array with dimensions <span class="math notranslate nohighlight">\(N\)</span> (number of frames) <span class="math notranslate nohighlight">\(\times H\)</span> (height) <span class="math notranslate nohighlight">\(\times W\)</span> (width) <span class="math notranslate nohighlight">\(\times 3\)</span> (RGB), which is the format in which the Medusa pipeline expects the loaded video data to be.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cropping">
+<h3>Cropping<a class="headerlink" href="#cropping" title="Permalink to this heading">#</a></h3>
+<p>With the exception of the Mediapipe model, reconstruction models implemented in Medusa expect the data to be cropped in a particular way and resized to a specific height and width. For convenience, Medusa’s reconstruction models will in fact crop the data for you if you haven’t done so already. Here, however, we’ll show you how to crop the data yourself.</p>
+<p>For all FLAME-based reconstruction models, you need to use Medusa’s <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class, which is a reimplementation of the cropping procedure in the original <a class="reference external" href="https://github.com/yfeng95/DECA/blob/master/decalib/datasets/datasets.py">DECA model</a>. (Medusa’s other crop model, <code class="docutils literal notranslate"><span class="pre">AlignCropModel</span></code>, is only used for the image-based reconstruction model <a class="reference internal" href="../api/python/recon/flame/mica/recon/index.html"><span class="doc std std-doc">MICA</span></a>.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.crop</span> <span class="kn">import</span> <span class="n">BboxCropModel</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This particular crop model roughly does the following:</p>
+<ul class="simple">
+<li><p>Runs a face detection model that returns, per detected face, a bounding box (and five landmarks);</p></li>
+<li><p>Transforms the bounding box into a standard format and size;</p></li>
+<li><p>Warps and resamples the original image to the cropped image space (using a similarity transform)</p></li>
+</ul>
+<p>The face detection model used is the <a class="reference external" href="https://insightface.ai/scrfd">SCRFD model</a> from <a class="reference external" href="https://insightface.ai/">Insightface</a>, reimplemented to be completely in PyTorch (and thus a lot faster). We’ll skip over the details of the crop model for now (see <a class="reference internal" href="face_and_landmark_detection.html"><span class="doc std std-doc">this tutorial</span></a>).</p>
+<p>For most FLAME-based models, the default arguments for initialization of this crop model suffice:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">crop_model</span> <span class="o">=</span> <span class="n">BboxCropModel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, to run the crop model on the batch of video frames, you use the <code class="docutils literal notranslate"><span class="pre">crop_model</span></code> object as if it were a function (which runs the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method, which is common for PyTorch models):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_crop</span> <span class="o">=</span> <span class="n">crop_model</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The crop model in fact returns a dictionary with multiple outputs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">out_crop</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For now, the most important key is <code class="docutils literal notranslate"><span class="pre">'imgs_crop'</span></code>, which contain the cropped images:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_cropped</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;imgs_crop&#39;</span><span class="p">]</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">batch_cropped</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the crop models returns the data in the “channels first” format, i.e., <span class="math notranslate nohighlight">\(N \times 3 \times H \times W\)</span>, as is expected by the reconstruction models.</p>
+</section>
+<section id="reconstruction">
+<h3>Reconstruction<a class="headerlink" href="#reconstruction" title="Permalink to this heading">#</a></h3>
+<p>With the data cropped and resampled to the correct dimensions, we can finally run the reconstruction model. The reconstruction model classes can be imported from <code class="docutils literal notranslate"><span class="pre">medusa.recon</span></code> and currently we provide three different classes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Mediapipe</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DecaReconModel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MicaReconModel</span></code></p></li>
+</ul>
+<p>Importantly, as the EMOCA model is a retrained versions of the original DECA models, they are all created by initializing a <code class="docutils literal notranslate"><span class="pre">DecaReconModel</span></code> object. The exact deep learning model used by <code class="docutils literal notranslate"><span class="pre">DecaReconModel</span></code> depends on the <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter (which is one of ‘deca-coarse’, ‘deca-dense’, ‘emoca-coarse’, ‘emoca-dense’).</p>
+<p>So if you’d want to create an EMOCA-based (coarse) reconstruction model, you’ll do:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.recon</span> <span class="kn">import</span> <span class="n">DecaReconModel</span>
+<span class="n">recon_model</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Actually, when you’re manually cropping the image yourself, you also need to supply an additional argument upon initialization: <code class="docutils literal notranslate"><span class="pre">orig_img_size</span></code> (a tuple with two integers representing width and height of the original image). The reason is that this will include the information about the location of the face(s) in the <em>original</em> image space rather than the <em>cropped</em> image space.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orig_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># W x H</span>
+<span class="n">recon_model</span> <span class="o">=</span> <span class="n">DecaReconModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">,</span> <span class="n">orig_img_size</span><span class="o">=</span><span class="n">orig_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To run the reconstruction model on the cropped images, you’ll call it as a function (triggering the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method) with the cropped images as first input and, optionally, the crop matrices from the cropping outputs (for the same reason as we initialized the recon model with the <code class="docutils literal notranslate"><span class="pre">orig_img_size</span></code> parameter):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_crop_mat</span> <span class="o">=</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;crop_mat&#39;</span><span class="p">]</span>
+<span class="n">out_recon</span> <span class="o">=</span> <span class="n">recon_model</span><span class="p">(</span><span class="n">batch_cropped</span><span class="p">,</span> <span class="n">batch_crop_mat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Like the crop model, the reconstruction model returns a dictionary with different outputs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">out_recon</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">'v'</span></code> key represents the reconstructed vertices and are stored in a PyTorch tensor of shape <span class="math notranslate nohighlight">\(N\)</span> (cropped images) <span class="math notranslate nohighlight">\(\times V\)</span> (vertices) <span class="math notranslate nohighlight">\(\times 3\)</span> (XYZ):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">'mat'</span></code> key represents the estimated “pose” relative to a standard (forward facing, non-rotated) reference face. It does so using a <span class="math notranslate nohighlight">\(4 \times 4\)</span> affine matrix per cropped image:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll go into how to interpret these values in more detail in <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">another tutorial</span></a>.</p>
+</section>
+<section id="tracking">
+<h3>Tracking<a class="headerlink" href="#tracking" title="Permalink to this heading">#</a></h3>
+<p>Ideally, the face detector (used in the <code class="docutils literal notranslate"><span class="pre">BboxCropModel</span></code> class) only detects a single face in each frame of our video (which, in fact, only contains only face; see <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>). However, sometimes a video frame might not contain a face (or might be missed by the detector) or might contain multiple faces.</p>
+<p><strong>Note</strong>: the rest of the section contains extra information that is relevant if you deal with video stimuli with more than one face in it. If you don’t, you can safely ignore this section.</p>
+<p>In case of multiple faces per frame, at some point you might want to “assign” each detection (and subsequent cropped image and reconstruction) to a particular face index. This process is sometimes called (face) “tracking”. To perform tracking, you can use the function <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.tracking</span> <span class="kn">import</span> <span class="n">sort_faces</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This function needs two arguments: <code class="docutils literal notranslate"><span class="pre">lms</span></code> and <code class="docutils literal notranslate"><span class="pre">img_idx</span></code>. The <code class="docutils literal notranslate"><span class="pre">lms</span></code> (short for “landmarks”) refers to a PyTorch tensor of shape <span class="math notranslate nohighlight">\(N\)</span> (frames) <span class="math notranslate nohighlight">\(\times L\)</span> (landmarks) <span class="math notranslate nohighlight">\(\times C\)</span> (coordinates, e.g., 2 for image-based landmarks). The <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> represents a integer tensor which maps detections to the frame they were detected in. For example, an <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> of [0, 0, 1, 1, 2, 3, 4] would mean that there were two detections in frame 0, two in frame 1, and just one in frame 2, 3, and 4.</p>
+<p>Such an <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> tensor is in fact returned by Medusa’s crop models (as part of the output dictionary):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For this video, the detector actually detected one face for each frame (as expected).</p>
+<p>For the <code class="docutils literal notranslate"><span class="pre">lms</span></code> parameter, you can use the five landmarks returned by the crop model or the full set of reconstructed vertices (here: 5023 landmarks); the <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code> function does not care whether the landmarks are 2D (such as the <code class="docutils literal notranslate"><span class="pre">lms</span></code> from the crop model) or 3D (such as the reconstructed vertices).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sort_faces</span></code> function will basically just try to assign each set of vertices to the “closest” (in terms of Euclidean distance) set of vertices in its current set. It then returns a face index for each detection (as an integer tensor):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">face_idx</span> <span class="o">=</span> <span class="n">sort_faces</span><span class="p">(</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;lms&#39;</span><span class="p">],</span> <span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">])</span>
+<span class="n">face_idx</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the function assigned the same face index (<code class="docutils literal notranslate"><span class="pre">0</span></code>) to each detection across the eight frames. However, the function has been tested and validated with much more difficult stimuli with frames without faces and multiple (up to four) moving faces.</p>
+</section>
+<section id="storing-the-data">
+<h3>Storing the data<a class="headerlink" href="#storing-the-data" title="Permalink to this heading">#</a></h3>
+<p>At this point, we have a bunch of different data sources, like reconstruction data, video metadata, tracking data, that we might like to store. As we’ve seen before, Medusa uses the custom class <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> to store all features relevant to analyze and render the 4D reconstruction data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.containers</span> <span class="kn">import</span> <span class="n">Data4D</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It takes quite a few arguments upon initialization. The most important ones are <code class="docutils literal notranslate"><span class="pre">v</span></code> and <code class="docutils literal notranslate"><span class="pre">mat</span></code>, representing the reconstructed vertices and pose (as affine matrices) — both as PyTorch tensors. Additionally, if you want to render the reconstructed data, you also need to pass the constructor the triangles associated with the vertices (the <code class="docutils literal notranslate"><span class="pre">tri</span></code> argument), the camera matrix to use (the <code class="docutils literal notranslate"><span class="pre">cam_mat</span></code> argument), and some video metadata (the <code class="docutils literal notranslate"><span class="pre">video_metadata</span></code> argument, a dictionary), as well as some tracking information (the aforementioned <code class="docutils literal notranslate"><span class="pre">img_idx</span></code> and <code class="docutils literal notranslate"><span class="pre">face_idx</span></code> features).</p>
+<p>The default triangles and camera matrix can be extracted from the reconstruction model and the video metadata from the <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tris</span> <span class="o">=</span> <span class="n">recon_model</span><span class="o">.</span><span class="n">get_tris</span><span class="p">()</span>
+<span class="n">cam_mat</span> <span class="o">=</span> <span class="n">recon_model</span><span class="o">.</span><span class="n">get_cam_mat</span><span class="p">()</span>
+<span class="n">video_metadata</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, initialization would look something like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_recon</span> <span class="o">=</span> <span class="n">Data4D</span><span class="p">(</span>
+    <span class="c1"># recon data</span>
+    <span class="n">v</span><span class="o">=</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span>
+    <span class="n">mat</span><span class="o">=</span><span class="n">out_recon</span><span class="p">[</span><span class="s1">&#39;mat&#39;</span><span class="p">],</span>
+    <span class="c1"># data for rendering</span>
+    <span class="n">tris</span><span class="o">=</span><span class="n">tris</span><span class="p">,</span>
+    <span class="n">cam_mat</span><span class="o">=</span><span class="n">cam_mat</span><span class="p">,</span>
+    <span class="n">img_idx</span><span class="o">=</span><span class="n">out_crop</span><span class="p">[</span><span class="s1">&#39;img_idx&#39;</span><span class="p">],</span>
+    <span class="n">face_idx</span><span class="o">=</span><span class="n">face_idx</span><span class="p">,</span>
+    <span class="n">video_metadata</span><span class="o">=</span><span class="n">video_metadata</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>That’s it for this tutorial! If you want to know more about the <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> class and how data is represented in Medusa, check out the <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation</span></a> tutorial (up next).</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../getting_started/citation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">How to cite Medusa and its dependencies</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data_representation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data representation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-easy-way">The easy way</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mediapipe">Mediapipe</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flame-based-models">FLAME-based models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hard-way">The hard way</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data loading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cropping">Cropping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reconstruction">Reconstruction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking">Tracking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#storing-the-data">Storing the data</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Lukas Snoek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Developed at the University of Glasgow
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

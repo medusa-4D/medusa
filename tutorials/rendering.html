@@ -1,0 +1,982 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Rendering &#8212; Medusa</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/rendering';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analysis" href="analysis.html" />
+    <link rel="prev" title="Data representation" href="data_representation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Medusa: 4D face reconstruction and analysis
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Medusa installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/citation.html">Citation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="reconstruction.html">4D reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_representation.html">Data representation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="face_and_landmark_detection.html">Face &amp; landmark detection</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../api/cli.html">Command-line interface</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/python.html">Python interface</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/analysis/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.analysis</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/containers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/fourD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.fourD</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/results/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.results</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/containers/threeD/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.containers.threeD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/align_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.align_crop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/crop/bbox_crop/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.crop.bbox_crop</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/example_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.example_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/regenerate_example_recon_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.regenerate_example_recon_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/data/template_data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.data.template_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/defaults/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.defaults</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/detect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/scrfd/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.scrfd</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/detect/yunet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.detect.yunet</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/epoch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.epoch</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.geometry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/io/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.io</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/landmark/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/landmark/retinaface/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.landmark.retinaface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/log/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.log</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/onnx/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.onnx</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/preproc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/align/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.align</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/preproc/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.preproc.filter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/flame/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/deca/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.deca</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/mica/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.mica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/decoders/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.decoders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/flame/lbs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.flame.lbs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api/python/recon/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api/python/recon/mpipe/mpipe/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.mpipe.mpipe</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/recon/recon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.recon.recon</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/python/render/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/image/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.image</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/overlay/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.overlay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/python/render/video/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.render.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/tracking/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.tracking</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/python/transforms/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">medusa.transforms</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/for_developers.html">For developers</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/medusa-4D/medusa/master?urlpath=tree/tutorials/rendering.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/edit/master/tutorials/rendering.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/medusa-4D/medusa/issues/new?title=Issue%20on%20page%20%2Ftutorials/rendering.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tutorials/rendering.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Rendering</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-to-video-rendering">4D-to-video rendering</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overlays">Overlays</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-to-image-rendering">3D-to-image rendering</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="rendering">
+<h1>Rendering<a class="headerlink" href="#rendering" title="Permalink to this heading">#</a></h1>
+<p>In this tutorial, we’ll explain the ins and outs of rendering: the process of creating an image from 3D data.</p>
+<section id="d-to-video-rendering">
+<h2>4D-to-video rendering<a class="headerlink" href="#d-to-video-rendering" title="Permalink to this heading">#</a></h2>
+<p>In Medusa, we try to make it as easy as possible to render 4D reconstruction data as a video. As you might have seen in the <a class="reference internal" href="../getting_started/quickstart.html"><span class="doc std std-doc">quickstart</span></a>, you can use a <code class="docutils literal notranslate"><span class="pre">VideoRenderer</span></code> object for this. Note that this renderer is only available if you have <a class="reference external" href="https://pytorch3d.org/">pytorch3d</a> installed, which is unfortunately not possible on Windows at the moment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.render</span> <span class="kn">import</span> <span class="n">VideoRenderer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The class constructor takes three arguments — <code class="docutils literal notranslate"><span class="pre">shading</span></code>, <code class="docutils literal notranslate"><span class="pre">lights</span></code>, and <code class="docutils literal notranslate"><span class="pre">loglevel</span></code>. We’ll ignore the <code class="docutils literal notranslate"><span class="pre">lights</span></code> argument, which we’ll discuss later.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">shading</span></code> argument can be either “flat”, which creates a faceted look, or “smooth”, which creates a smoother surface using <a class="reference external" href="https://en.wikipedia.org/wiki/Phong_shading">Phong shading</a>. We’ll use smooth shading for now and set the loglevel to ‘WARNING’ (which does not output a progress bar which clutters the website):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">renderer</span> <span class="o">=</span> <span class="n">VideoRenderer</span><span class="p">(</span><span class="n">shading</span><span class="o">=</span><span class="s1">&#39;smooth&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The renderer expects the 4D reconstruction data to be wrapped in a <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> object (see <a class="reference internal" href="data_representation.html"><span class="doc std std-doc">data representation tutorial</span></a>). Let’s load in the 4D reconstruction (by the ‘emoca-coarse’ model) from our default video:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_data4d</span>
+<span class="n">data_4d</span> <span class="o">=</span> <span class="n">get_example_data4d</span><span class="p">(</span><span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;emoca-coarse&#39;</span><span class="p">)</span>
+
+<span class="c1"># We&#39;ll slice the Data4D object this way (resulting in only 50 frames/meshes) so that the </span>
+<span class="c1"># rendering is a bit faster for this tutorial</span>
+<span class="n">data_4d</span> <span class="o">=</span> <span class="n">data_4d</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To render the 4D data to a video, you use the <code class="docutils literal notranslate"><span class="pre">VideoRenderer</span></code> object’s <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method (i.e., calling <code class="docutils literal notranslate"><span class="pre">renderer()</span></code>). This method has two mandatory arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">f_out</span></code>: path where the video will be saved</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: the <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> object</p></li>
+</ul>
+<p>Additionally, this method accepts two optional arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">video</span></code>: path to original video</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code>: colors to project onto the vertices before rendering</p></li>
+</ul>
+<p>If you set the <code class="docutils literal notranslate"><span class="pre">video</span></code> argument to the original video associated with the 4D reconstruction, then the video will be used as a background on which the 4D data is rendered. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (in case the data will be rendered on a white background).</p>
+<p>Let’s render our data on top of the video!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Video</span>  <span class="c1"># just to show the video in the notebook/website</span>
+
+<span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="n">f_out</span> <span class="o">=</span> <span class="s1">&#39;./smooth.mp4&#39;</span>
+
+<span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="n">vid</span><span class="p">)</span>
+
+<span class="c1"># Show result</span>
+<span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">f_out</span> <span class="o">=</span> <span class="s1">&#39;./smooth.mp4&#39;</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="n">vid</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># Show result</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: &#39;VideoRenderer&#39; object is not callable
+</pre></div>
+</div>
+</div>
+</div>
+<p>One way to make the visualization a little nicer is by only rendering the face (rather than the full head). To do so, you can use the <code class="docutils literal notranslate"><span class="pre">apply_vertex_mask</span></code> method from the <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> object with the <code class="docutils literal notranslate"><span class="pre">name</span></code> argument set to <code class="docutils literal notranslate"><span class="pre">'face'</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_4d</span><span class="o">.</span><span class="n">apply_vertex_mask</span><span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This method basically removes all non-face vertices from the mesh, leaving us with 1787 vertices (instead of the original 5023):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">(</span><span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s re-render the data (which is a lot faster now too, as it has to work with fewer vertices):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">video</span><span class="o">=</span><span class="n">vid</span><span class="p">)</span>
+<span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="overlays">
+<h3>Overlays<a class="headerlink" href="#overlays" title="Permalink to this heading">#</a></h3>
+<p>So far, we only rendered the face as a grayish, untextured shape. We can, however, give it a different uniform color or specific color per vertex. To do so, we can give the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function an additional argument, <code class="docutils literal notranslate"><span class="pre">overlay</span></code>, a tensor with a single color per vertex. Colors need to be represented as RGB float values ranging from 0 to 1, so overlay should be a <span class="math notranslate nohighlight">\(V \times 3\)</span> tensor.</p>
+<p>To demonstrate, let’s create an overlay that’ll make the face bright red, which corresponds to an RGB value of [1., 0., 0.]:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">V</span> <span class="o">=</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">vertex_colors</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">V</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">data_4d</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="n">vertex_colors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1"># set &#39;red&#39; channel to 1</span>
+
+<span class="nb">tuple</span><span class="p">(</span><span class="n">vertex_colors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s render the video again, but now with <code class="docutils literal notranslate"><span class="pre">vertex_colors</span></code> used for the <code class="docutils literal notranslate"><span class="pre">overlay</span></code> argument:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_out</span> <span class="o">=</span> <span class="s1">&#39;./test.mp4&#39;</span>
+<span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="n">vertex_colors</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that we don’t have to use the same colors for each time point! We can also create an overlay of shape <span class="math notranslate nohighlight">\(N\)</span> (nr of frames) <span class="math notranslate nohighlight">\(\times V \times 3\)</span>, which specifies a specific color for each frame (and each vertex). To demonstrate, we’ll generate random RGB values for each frame and vertex, creating quite a trippy visualization!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">vertex_colors</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+<span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="n">vertex_colors</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now suppose that we would like to color the face along a more interesting feature, like the amount of local movement relative to the first frame (which we assume represents a neutral face). This is in fact quite an extensive procedure. We’ll walk you through this procedure step by step, but aftwards we’ll show you a way to do this more easily.</p>
+<p>First, each frame’s movement relative to the first frame (<span class="math notranslate nohighlight">\(\delta v_{i}\)</span>) can be computed as follows:</p>
+<p>\begin{equation}
+\delta v_{i} = v_{i} - v_{0}
+\end{equation}</p>
+<p>Importantly, we assume for now that we’re only interesting in the local movement of the face (i.e., facial expressions) rather than the global movement (i.e., rotation and movement of the entire head). To project out the global movement, we can call the <code class="docutils literal notranslate"><span class="pre">to_local</span></code> method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To only show local deviations, we can use the to_local() method which projects out any &quot;global&quot; movement</span>
+<span class="n">data_4d</span><span class="o">.</span><span class="n">to_local</span><span class="p">()</span>
+<span class="n">dv</span> <span class="o">=</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">v</span> <span class="o">-</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">dv</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The problem here is that we do not have one value for each vertex to visualize, but three: the movement in the X (left-right), Y (up-down), and Z (forward-backward) direction! We could of course just visualize a single direction, but another possibility is that we project the movement on the <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">vertex normals</a>: the direction perpendicular to the mesh at each vertex (see image below).</p>
+<p><img alt="vertex_normals" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Vertex_normals.png/220px-Vertex_normals.png" /></p>
+<p><em>Red lines represent the vertex normals; from <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">wikipedia</a></em></p>
+<p>We can get the vertex normals and project the movement (<code class="docutils literal notranslate"><span class="pre">dv</span></code>) onto them as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.geometry</span> <span class="kn">import</span> <span class="n">compute_vertex_normals</span>
+
+<span class="c1"># normals: V (1787) x 3 (XYZ)</span>
+<span class="n">normals</span> <span class="o">=</span> <span class="n">compute_vertex_normals</span><span class="p">(</span><span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">tris</span><span class="p">)</span>
+<span class="n">dv_proj</span> <span class="o">=</span> <span class="p">(</span><span class="n">normals</span> <span class="o">*</span> <span class="n">dv</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">tuple</span><span class="p">(</span><span class="n">dv_proj</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The projected data (<code class="docutils literal notranslate"><span class="pre">dv_proj</span></code>) now represents movement relative to the normal direction: positive values indicate that movement occurs in the same direction as the normal (i.e., “outwards”) and negative values indicate the movement occurs in the direction opposite to the normal (i.e., “inwards”).</p>
+<p>Now, the only step remaining is to convert the values (<code class="docutils literal notranslate"><span class="pre">dv_proj</span></code>) to RGB colors. Let’s say we want to show inward movement as blue and outward movement as red; we can use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> for this as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">CenteredNorm</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colormaps</span>
+
+<span class="n">norm</span> <span class="o">=</span> <span class="n">CenteredNorm</span><span class="p">(</span><span class="n">vcenter</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>  <span class="c1"># will make sure that 0 is in the &quot;middle&quot; of the colormap</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">colormaps</span><span class="p">[</span><span class="s1">&#39;bwr&#39;</span><span class="p">]</span>  <span class="c1"># blue-white-red colormap</span>
+
+<span class="c1"># the colormap does not accept torch tensors</span>
+<span class="n">dv_proj</span> <span class="o">=</span> <span class="n">dv_proj</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">dv_proj_colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">dv_proj</span><span class="p">))</span>
+
+<span class="c1"># convert back to torch tensor</span>
+<span class="n">dv_proj_colors</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">dv_proj_colors</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">data_4d</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+<span class="c1"># N x V x RGBA (but the &#39;A&#39; will be discarded later)</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">dv_proj_colors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we can pass these colors (<code class="docutils literal notranslate"><span class="pre">dv_proj_colors</span></code>) to the renderer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">renderer</span> <span class="o">=</span> <span class="n">VideoRenderer</span><span class="p">(</span><span class="n">shading</span><span class="o">=</span><span class="s1">&#39;smooth&#39;</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
+<span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="n">dv_proj_colors</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You’ll probably agree that this entire process is quite cumbersome. To make things a little easier, Medusa provides an <code class="docutils literal notranslate"><span class="pre">Overlay</span></code> class that performs much of the boilerplate code necessary to render such overlays.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.render</span> <span class="kn">import</span> <span class="n">Overlay</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The most important arguments when initializing an <code class="docutils literal notranslate"><span class="pre">Overview</span></code> object are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">v</span></code>: the vertex values that will be used to create colors (e.g., the <code class="docutils literal notranslate"><span class="pre">dv</span></code> variable from earlier)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmap</span></code>: a string with the <a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html">Matplotlib colormap</a> that will be used (default: <code class="docutils literal notranslate"><span class="pre">'bwr'</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code>: dimension of <code class="docutils literal notranslate"><span class="pre">v</span></code> that will be plotted (0 for X, 1 for Y, 2 for Z, or ‘normals’)</p></li>
+</ul>
+<p>If you want to project the XYZ values onto the vertex normals (by setting <code class="docutils literal notranslate"><span class="pre">dim='normals'</span></code>), then you also need to provide the vertices of a neutral frame (<code class="docutils literal notranslate"><span class="pre">v0</span></code>) and the mesh triangles (<code class="docutils literal notranslate"><span class="pre">tris</span></code>), as shown below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overlay</span> <span class="o">=</span> <span class="n">Overlay</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">vcenter</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;normals&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">=</span><span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tris</span><span class="o">=</span><span class="n">data_4d</span><span class="o">.</span><span class="n">tris</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To get the colors, simply call the <code class="docutils literal notranslate"><span class="pre">to_rgb</span></code> method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="n">overlay</span><span class="o">.</span><span class="n">to_rgb</span><span class="p">()</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And finally render as before:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_4d</span><span class="o">.</span><span class="n">to_world</span><span class="p">()</span>
+<span class="n">renderer</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">data_4d</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="n">f_out</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="d-to-image-rendering">
+<h2>3D-to-image rendering<a class="headerlink" href="#d-to-image-rendering" title="Permalink to this heading">#</a></h2>
+<p>A lot of the steps necessary to render each 3D mesh from the 4D sequence is abstracted away in the <code class="docutils literal notranslate"><span class="pre">VideoRender</span></code> class. If you want to know more or want more flexibility with respect to rendering, keep on reading!</p>
+<p>Essentially, what the <code class="docutils literal notranslate"><span class="pre">VideoRender</span></code> class does is looping over all frames in the video, fetching the 3D mesh(es) per frame (remember, there may be more than one face, and thus more than one mesh, per frame!), render them to an image, which are written to disk as a continuous video file.</p>
+<p>Rendering happens using the <code class="docutils literal notranslate"><span class="pre">PytorchRenderer</span></code> class, a thin wrapper around functionality from the <code class="docutils literal notranslate"><span class="pre">pytorch3d</span></code> package:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.render</span> <span class="kn">import</span> <span class="n">PytorchRenderer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that this renderer only renders (batches of) 3D meshes to <em>images</em>. It is initialized with a three mandatory arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">viewport</span></code> (a tuple with two integers): the output size of the rendered image (width x height)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam_mat</span></code> (a 4x4 tensor or numpy array): the affine matrix that defines the camera pose</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cam_type</span></code> (a string): the type of camera</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">cam_type</span></code> is “orthographic” for any FLAME-based reconstruction data and “perspective” for Mediapipe data. The <code class="docutils literal notranslate"><span class="pre">cam_mat</span></code> and <code class="docutils literal notranslate"><span class="pre">viewport</span></code> data can be extracted from the <code class="docutils literal notranslate"><span class="pre">Data4D</span></code> object you intend to render:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">viewport</span> <span class="o">=</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">video_metadata</span><span class="p">[</span><span class="s1">&#39;img_size&#39;</span><span class="p">]</span>
+<span class="n">renderer</span> <span class="o">=</span> <span class="n">PytorchRenderer</span><span class="p">(</span><span class="n">viewport</span><span class="p">,</span> <span class="n">cam_mat</span><span class="o">=</span><span class="n">data_4d</span><span class="o">.</span><span class="n">cam_mat</span><span class="p">,</span> <span class="n">cam_type</span><span class="o">=</span><span class="s1">&#39;orthographic&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, you can pass any single or batch of 3D meshes to the renderer’s <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function (together with the mesh’s triangles) which will return an image with the mesh(es) rendered onto it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># render the first time point</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">(</span><span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">tris</span><span class="p">)</span>
+
+<span class="nb">tuple</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the returned image (<code class="docutils literal notranslate"><span class="pre">img</span></code>) is of shape <span class="math notranslate nohighlight">\(N\)</span> (number of images) <span class="math notranslate nohighlight">\(\times H\)</span> (height) <span class="math notranslate nohighlight">\(\times W\)</span> (width) <span class="math notranslate nohighlight">\(\times 4\)</span> (RGBA) with unsigned integers (0-255). Note that you can also render <em>multiple</em> meshes to <em>multiple</em> images at the same time by explicitly setting the <code class="docutils literal notranslate"><span class="pre">single_image</span></code> argument to <code class="docutils literal notranslate"><span class="pre">False</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># render the first 16 time points</span>
+<span class="n">imgs</span> <span class="o">=</span> <span class="n">renderer</span><span class="p">(</span><span class="n">data_4d</span><span class="o">.</span><span class="n">v</span><span class="p">[:</span><span class="mi">16</span><span class="p">],</span> <span class="n">data_4d</span><span class="o">.</span><span class="n">tris</span><span class="p">,</span> <span class="n">single_image</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you want to render the 16 rendered meshes on top of the original video frames, we can load in the video frames and “blend” it with the video frames. To load the video frames in memory, we can use the <code class="docutils literal notranslate"><span class="pre">VideoLoader</span></code> class:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.data</span> <span class="kn">import</span> <span class="n">get_example_video</span>
+<span class="kn">from</span> <span class="nn">medusa.io</span> <span class="kn">import</span> <span class="n">VideoLoader</span>
+
+<span class="n">vid</span> <span class="o">=</span> <span class="n">get_example_video</span><span class="p">()</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">VideoLoader</span><span class="p">(</span><span class="n">vid</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c1"># To only get a single batch, you can create an iterator manually and call next() on it</span>
+<span class="c1"># (bg = background)</span>
+<span class="n">bg</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+
+<span class="nb">tuple</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And to blend the rendered meshes with the video, we can call the <code class="docutils literal notranslate"><span class="pre">alpha_blend</span></code> method from the renderer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">img_with_bg</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">alpha_blend</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">bg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To write the rendered images (which are torch tensors) to a video file, we can use the <code class="docutils literal notranslate"><span class="pre">VideoWriter</span></code> class:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">medusa.io</span> <span class="kn">import</span> <span class="n">VideoWriter</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">VideoWriter</span><span class="p">(</span><span class="s1">&#39;./test.mp4&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">loader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()[</span><span class="s1">&#39;fps&#39;</span><span class="p">])</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">img_with_bg</span><span class="p">)</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># call close if you&#39;re done!</span>
+
+<span class="n">Video</span><span class="p">(</span><span class="s1">&#39;./test.mp4&#39;</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, we’re getting the same result as with the <code class="docutils literal notranslate"><span class="pre">VideoRenderer</span></code> approach (albeit with only 16 frames)! Although it requires more boilerplate code, this approach gives you more flexibility to render the data exactly as you want it.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="data_representation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data representation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-to-video-rendering">4D-to-video rendering</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overlays">Overlays</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-to-image-rendering">3D-to-image rendering</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Lukas Snoek
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Developed at the University of Glasgow
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
